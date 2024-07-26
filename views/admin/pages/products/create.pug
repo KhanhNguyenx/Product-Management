@@ -106,9 +106,13 @@ block main
       )
       label(for="statusInActive" class="form-check-label") Dừng hoạt động
     div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-primary"
-      ) Tạo mới
+        button(
+            type="submit"
+            class="btn btn-warning"
+        ) Tạo mới
+        a(
+            class="btn btn-info"
+            href=`${prefixAdmin}/products`
+        ) Quay lại
 
   script(src="/admin/js/product.js")

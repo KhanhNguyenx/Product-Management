@@ -33,7 +33,7 @@ module.exports.index = async (req, res) => {
   //End Pagination
 
   const products = await Product.find(find)
-    .sort({ position: "asc" })
+    .sort({ position: "asc" }) // Thứ tự sản phẩm
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
   //console.log(products);

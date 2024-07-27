@@ -15,7 +15,7 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(methodOverride("_method"));
-app.set("views", `${__dirname}/views`);
+app.set("views", `${__dirname}/views`); 
 app.set("view engine", "pug");
 app.use(bodyParser.urlencoded({ extended: false }));
 

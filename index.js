@@ -1,4 +1,5 @@
 const express = require("express");
+var path = require("path");
 require("dotenv").config();
 const router = require("./routes/client/index.router");
 const routerAdmin = require("./routes/admin/index.router");
@@ -15,10 +16,16 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(methodOverride("_method"));
-app.set("views", `${__dirname}/views`); 
+app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//TinyMCE
+app.use(
+  "/tinymce",
+  express.static(path.join(__dirname, "node_modules", "tinymce"))
+);
+//End TinyMCE
 // flash
 app.use(cookieParser("KJJSLKASASASA"));
 app.use(session({ cookie: { maxAge: 60000 } }));

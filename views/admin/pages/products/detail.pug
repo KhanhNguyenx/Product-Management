@@ -34,7 +34,9 @@ block main
     div(class="mb-4") Vị trí: <b>#{product.position}</b>
 
   if (product.description)
-    div(class="mb-4") #{product.description}
+    div(class="mb-4") !{product.description} 
+    //- ! để hiển thị ra mã html (dùng để hiển thị các thuộc tính)
+    //- # để hiển thị ở dạng string (lưu trong dtb)
 
   a(
     class="btn btn-warning"

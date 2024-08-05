@@ -7,14 +7,25 @@ include ../../mixins/alert.pug
 include ../../mixins/sort.pug
 
 block main
-
+  +alert-success("5000")
+  +alert-error("5000")
   h1(class="mb-4") #{pageTitle}
-
+  .card.mb-3
+    .card-header Bộ lọc và Tìm kiếm
+        .card-body
+            .row
+                .col-6
+                    +filter-status(filterStatus)
+                .col-6 
+                    +search(keyword)
+                .col-4
+                    +sort()
   .card.mb-3
     .card-header Danh sách
       .card-body
         .row 
           .col-8
+            +form-change-multi(`${prefixAdmin}/products-category/change-multi?_method=PATCH`)
           .col-4.text-right
             a(
             href=`${prefixAdmin}/products-category/create`
@@ -28,9 +39,9 @@ block main
             thead
             tr
                 th 
-                input(
-                    type="checkbox" name="checkall"
-                )
+                    input(
+                        type="checkbox" name="checkall"
+                    )
                 th STT
                 th Hình ảnh
                 th Tiêu đề
@@ -95,3 +106,9 @@ block main
                         href=`${prefixAdmin}/products-category/detail/${item.id}` 
                         class="btn btn-secondary btn-sm"
                     ) Chi tiết
+    form(
+        action=""
+        method="POST"
+        id="form-change-status"
+        data-path =`${prefixAdmin}/products-category/change-status`
+    ) 

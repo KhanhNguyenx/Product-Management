@@ -27,6 +27,7 @@
     "tinymce": "^7.2.1"
   },
   "devDependencies": {
+    "@types/node": "^22.1.0",
     "nodemon": "^3.1.4"
   }
 }

@@ -53,6 +53,10 @@ module.exports.index = async (req, res) => {
 };
 // [GET]/admin/products-category/create
 module.exports.create = async (req, res) => {
+  let find = {
+    deleted: false,
+  };
+  const records = ProductCategory.find(find);
   res.render("admin/pages/products-category/create.pug", {
     pageTitle: "Tạo danh mục sản phẩm",
   });

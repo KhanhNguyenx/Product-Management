@@ -28,7 +28,6 @@ module.exports.index = async (req, res) => {
     req.query,
     countProducts
   );
-
   //End Pagination
   // Sort
   let sort = {};
@@ -42,7 +41,6 @@ module.exports.index = async (req, res) => {
     .sort(sort) // Thứ tự sản phẩm
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
-  //console.log(products);
 
   res.render("admin/pages/products/index.pug", {
     pageTitle: "Trang sản phẩm",

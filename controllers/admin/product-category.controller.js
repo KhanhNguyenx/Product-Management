@@ -3,12 +3,14 @@ const filterStatusHelper = require("../../helpers/filterStatus");
 const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
 const systemConfig = require("../../config/system");
+const createTreeHelper = require("../../helpers/createTree");
 // [GET]/admin/products-category
 module.exports.index = async (req, res) => {
   const filterStatus = filterStatusHelper(req.query);
   let find = {
     deleted: false,
   };
+
   if (req.query.status) {
     find.status = req.query.status;
   }
@@ -18,37 +20,14 @@ module.exports.index = async (req, res) => {
     find.title = objectSearch.regex;
   }
   // End Search
-  //Pagination
-  const countProductCategory = await ProductCategory.countDocuments(find);
-  let objectPagination = paginationHelper(
-    {
-      currentPage: 1,
-      limitItems: 4,
-    },
-    req.query,
-    countProductCategory
-  );
-  //End Pagination
-  // Sort
-  let sort = {};
-  if (req.query.sortKey && req.query.sortValue) {
-    sort[req.query.sortKey] = req.query.sortValue;
-  } else {
-    sort.position = "desc";
-  }
-  // End Sort
-  const records = await ProductCategory.find(find)
-    .sort(sort) // Thứ tự sản phẩm
-    .limit(objectPagination.limitItems)
-    .skip(objectPagination.skip);
-  //console.log(products);
+  const records = await ProductCategory.find(find);
+  const newRecords = createTreeHelper.tree(records);
 
   res.render("admin/pages/products-category/index.pug", {
     pageTitle: "Danh mục sản phẩm",
-    records: records,
+    records: newRecords,
     filterStatus: filterStatus,
     keyword: objectSearch.keyword,
-    pagination: objectPagination,
   });
 };
 // [GET]/admin/products-category/create
@@ -56,9 +35,13 @@ module.exports.create = async (req, res) => {
   let find = {
     deleted: false,
   };
-  const records = ProductCategory.find(find);
+
+  const records = await ProductCategory.find(find);
+  const newRecords = createTreeHelper.tree(records);
+
   res.render("admin/pages/products-category/create.pug", {
     pageTitle: "Tạo danh mục sản phẩm",
+    records: newRecords,
   });
 };
 // [POST]/admin/products-category/create

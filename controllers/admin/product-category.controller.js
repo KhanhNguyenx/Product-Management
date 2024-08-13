@@ -159,6 +159,6 @@ module.exports.deleteItem = async (req, res) => {
       deletedAt: new Date(),
     }
   );
-  req.flash("success", `Đã xóa ${ids.length} sản phẩm thành công!`);
+  req.flash("success", `Đã xóa thành công!`);
   res.redirect("back");
 };

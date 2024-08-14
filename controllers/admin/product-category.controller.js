@@ -155,7 +155,7 @@ module.exports.editPatch = async (req, res) => {
     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
   }
 };
-// [DELETE]/admin/products/delete/:id
+// [DELETE]/admin/products-category/delete/:id
 module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
   // await Product.deleteOne({ _id: id });
@@ -168,4 +168,21 @@ module.exports.deleteItem = async (req, res) => {
   );
   req.flash("success", `Đã xóa thành công!`);
   res.redirect("back");
+};
+// [GET]/admin/products-category/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id,
+    };
+    const productCategory = await ProductCategory.findOne(find);
+    res.render("admin/pages/products-category/detail.pug", {
+      pageTitle: ProductCategory.title,
+      productCategory: productCategory,
+    });
+  } catch (error) {
+    req.flash("error", `Không tồn tại sản phẩm`);
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
 };

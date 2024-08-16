@@ -119,7 +119,7 @@ module.exports.create = async (req, res) => {
     deleted: false,
   };
   const category = await ProductCategory.find(find);
-  const newCategory = createTreeHelper.tree(category);
+  const newCategory = createTreeHelper(category);
   res.render("admin/pages/products/create.pug", {
     pageTitle: "Thêm mới sản phẩm",
     category: newCategory,
@@ -148,10 +148,16 @@ module.exports.edit = async (req, res) => {
       _id: req.params.id,
     };
     const product = await Product.findOne(find);
-    console.log(product);
+    const category = await ProductCategory.find({
+      deleted: false,
+    });
+
+    const newCategory = createTreeHelper(category);
+
     res.render("admin/pages/products/edit.pug", {
       pageTitle: "Chỉnh sửa sản phẩm",
       product: product,
+      category: newCategory,
     });
   } catch (error) {
     req.flash("error", `Không tồn tại sản phẩm`);

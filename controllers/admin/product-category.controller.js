@@ -21,11 +21,11 @@ module.exports.index = async (req, res) => {
   }
   // End Search
   const records = await ProductCategory.find(find);
-  const newRecords = createTreeHelper.tree(records);
+  // const newRecords = createTreeHelper(records);
 
   res.render("admin/pages/products-category/index.pug", {
     pageTitle: "Danh mục sản phẩm",
-    records: newRecords,
+    records: records,
     filterStatus: filterStatus,
     keyword: objectSearch.keyword,
   });
@@ -37,7 +37,7 @@ module.exports.create = async (req, res) => {
   };
 
   const records = await ProductCategory.find(find);
-  const newRecords = createTreeHelper.tree(records);
+  const newRecords = createTreeHelper(records);
 
   res.render("admin/pages/products-category/create.pug", {
     pageTitle: "Tạo danh mục sản phẩm",
@@ -121,7 +121,7 @@ module.exports.edit = async (req, res) => {
     const records = await ProductCategory.find({
       deleted: false,
     });
-    const newRecords = createTreeHelper.tree(records);
+    const newRecords = createTreeHelper(records);
 
     res.render("admin/pages/products-category/edit.pug", {
       pageTitle: "Chỉnh sửa sản phẩm",
@@ -137,7 +137,14 @@ module.exports.edit = async (req, res) => {
 module.exports.editPatch = async (req, res) => {
   try {
     const id = req.params.id;
-    req.body.position = parseInt(req.body.position);
+
+    if (req.body.position == "") {
+      const countRecords = await ProductCategory.countDocuments();
+      req.body.position = countRecords + 1;
+    } else {
+      req.body.position = parseInt(req.body.position);
+    }
+
     if (req.file && req.file.filename) {
       req.body.thumbnail = `/uploads/${req.file.filename}`;
     }
@@ -149,7 +156,7 @@ module.exports.editPatch = async (req, res) => {
       req.body
     );
     req.flash("success", `Cập nhật thành công`);
-    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+    res.redirect(`back`);
   } catch (error) {
     req.flash("error", `Cập nhật thất bại`);
     res.redirect(`${systemConfig.prefixAdmin}/products-category`);

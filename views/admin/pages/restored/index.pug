@@ -44,9 +44,10 @@ block main
                     )
                 td #{item.title}
                 td
-                    a(
-                        href=`${prefixAdmin}/restored/product-restored/${item.id}?_method=PATCH`
-                        class="badge badge-info"
+                    button(
+                        class="btn btn-info btn-sm ml-1"
+                        data-id = item.id 
+                        button-restored 
                     ) Khôi phục
         +pagination(pagination)
   .card.mb-3
@@ -78,10 +79,16 @@ block main
                     )
                 td #{item.title}
                 td
-                    a(
-                        href=`${prefixAdmin}/restored/product-category-restored/${item.id}`
-                        class="badge badge-info"
-                    ) Khôi phục
+                    //- button(
+                    //-     class="btn btn-info btn-sm ml-1"
+                    //-     data-id = item.id 
+                    //-     button-restored
+                    //- ) Khôi phục
         +pagination(pagination)
-
+    form(
+        action= ""
+        method="POST"
+        id="form-restored"
+        data-path =`${prefixAdmin}/restored`
+    )
     script(src="/admin/js/product.js")

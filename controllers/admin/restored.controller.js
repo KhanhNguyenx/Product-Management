@@ -58,34 +58,15 @@ module.exports.index = async (req, res) => {
     pagination: objectPagination,
   });
 };
-// [PATCH]/admin/restored/productRestored/:id
-module.exports.productRestored = async (req, res) => {
+// [PATCH]/admin/restored/:id
+module.exports.restored = async (req, res) => {
   try {
     const id = req.params.id;
     await Product.updateOne(
+      { _id: id },
       {
-        _id: id,
         deleted: false,
-      },
-      req.body
-    );
-    req.flash("success", `Khôi phục thành công`);
-    res.redirect("back");
-  } catch (error) {
-    req.flash("error", `Khôi phục thất bại`);
-    res.redirect(`${systemConfig.prefixAdmin}/restored`);
-  }
-};
-// [PATCH]/admin/restored/ProductCategory/:id
-module.exports.ProductCategoryRestored = async (req, res) => {
-  try {
-    const id = req.params.id;
-    await ProductCategory.updateOne(
-      {
-        _id: id,
-        deleted: false,
-      },
-      req.body
+      }
     );
     req.flash("success", `Khôi phục thành công`);
     res.redirect("back");

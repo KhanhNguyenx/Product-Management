@@ -48,7 +48,7 @@ if (buttonRestored.length > 0) {
       const isConfirm = confirm("Bạn có muốn khôi phục sản phẩm?");
       if (isConfirm) {
         const id = button.getAttribute("data-id");
-        const action = `${path}/${id}?_method=PATCH`;   
+        const action = `${path}/${id}?_method=PATCH`;
         formRestoredItem.action = action;
         formRestoredItem.submit();
       }

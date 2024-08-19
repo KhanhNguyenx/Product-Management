@@ -1,0 +1,24 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+  if(role.title)
+    a(href=`${prefixAdmin}/roles/edit/${role.id}`)
+        h1(class="mb-4") #{role.title}
+
+  if (role.description)
+    div(class="mb-4") !{role.description} 
+    //- ! để hiển thị ra mã html (dùng để hiển thị các thuộc tính)
+    //- # để hiển thị ở dạng string (lưu trong dtb)
+
+  a(
+    class="btn btn-warning"
+    href=`${prefixAdmin}/roles/edit/${role.id}`
+    ) Chỉnh sửa
+  a(
+    class="btn btn-info"
+    href=`${prefixAdmin}/roles`
+    ) Quay lại
+
+    
+    

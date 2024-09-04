@@ -20,7 +20,6 @@ module.exports.index = async (req, res) => {
   }
   // End Search
   //Pagination
-  const countProductCategory = await ProductCategory.countDocuments(find);
   const countProducts = await Product.countDocuments(find);
   let objectPagination = paginationHelper(
     {
@@ -28,7 +27,6 @@ module.exports.index = async (req, res) => {
       limitItems: 4,
     },
     req.query,
-    countProductCategory,
     countProducts
   );
   //End Pagination
@@ -40,18 +38,13 @@ module.exports.index = async (req, res) => {
     sort.position = "desc";
   }
   // End Sort
-  const productCategoryRecords = await ProductCategory.find(find)
-    .sort(sort) // Thứ tự sản phẩm
-    .limit(objectPagination.limitItems)
-    .skip(objectPagination.skip);
   const productRecords = await Product.find(find)
     .sort(sort) // Thứ tự sản phẩm
     .limit(objectPagination.limitItems)
     .skip(objectPagination.skip);
 
   res.render("admin/pages/restored/index.pug", {
-    pageTitle: "Khôi phục",
-    productCategoryRecords: productCategoryRecords,
+    pageTitle: "Khôi phục sản phẩm",
     productRecords: productRecords,
     filterStatus: filterStatus,
     keyword: objectSearch.keyword,

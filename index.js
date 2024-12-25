@@ -17,7 +17,8 @@ const port = process.env.PORT;
 
 app.use(methodOverride("_method"));
 app.set("views", `${__dirname}/views`);
-app.set("view engine", "pug");
+app.set("view engine", "pug");  
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //TinyMCE

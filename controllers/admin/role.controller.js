@@ -90,3 +90,34 @@ module.exports.delete = async (req, res) => {
   req.flash("success", `Đã xóa thành công!`);
   res.redirect("back");
 };
+
+// [GET] /admin/roles/permissions
+module.exports.permissions = async (req, res) => {
+  const records = await Role.find({
+    deleted: false
+  });
+  res.render("admin/pages/role/permissions.pug", {
+    pageTitle: "Phân quyền",
+    records: records
+  });
+}
+
+// [PATCH] /admin/roles/permissions
+module.exports.permissionsPatch = async (req, res) => {
+  const roles = JSON.parse(req.body.roles);
+  
+  try {
+    for (const item of roles) {
+      await Role.updateOne({
+        _id: item.id
+      }, {
+        permissions: item.permissions
+      });
+    }
+    req.flash("success", "Cập nhật phân quyền thành công!");
+  } catch (error) {
+    req.flash("success", "Cập nhật phân quyền không thành công!");
+  }
+
+  res.redirect("back");
+}

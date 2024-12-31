@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const flash = require("express-flash");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const moment = require("moment");
 database.connect();
 
 const app = express();
@@ -35,10 +36,14 @@ app.use(flash());
 
 //App Locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment; 
+
 app.use(express.static("public"));
 app.use(express.static(`${__dirname}/public`));
 
+// Routes Client
 router(app);
+// Routes Admin
 routerAdmin(app);
 
 app.listen(port, () => {

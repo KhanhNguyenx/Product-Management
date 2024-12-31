@@ -2,38 +2,41 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-  h1(class="mb-4") Thêm mới nhóm quyền
-    +alert-error(2000)
-    +alert-success(2000)
-  form(
-    action=`${prefixAdmin}/roles/edit/${role.id}?_method=PATCH`
-    id="form-edit-role"
-    method="POST"
-    )
-    div(class="form-group")
-      label(for="title") Tiêu đề
-      input(
-        type="text"
-        class="form-control"
-        id="title"
-        name="title"
-        value= role.title
-        required
+  if(role.permissions.includes("roles_edit"))
+    h1(class="mb-4") Thêm mới nhóm quyền
+      +alert-error(2000)
+      +alert-success(2000)
+    form(
+      action=`${prefixAdmin}/roles/edit/${role.id}?_method=PATCH`
+      id="form-edit-role"
+      method="POST"
       )
-    div(class="form-group")
-      label(for="desc") Mô tả
-      textarea(
-        class="form-control textarea-tinymce"
-        id="desc"
-        name="description"
-        rows="5" 
-      ) #{role.description} 
-    div(class="form-group")
-      button(   
-        type="submit"
-        class="btn btn-primary"
-      ) Cập nhật
-      a(
-        class="btn btn-info"
-        href=`${prefixAdmin}/roles`
-        ) Quay lại
+      div(class="form-group")
+        label(for="title") Tiêu đề
+        input(
+          type="text"
+          class="form-control"
+          id="title"
+          name="title"
+          value= role.title
+          required
+        )
+      div(class="form-group")
+        label(for="desc") Mô tả
+        textarea(
+          class="form-control textarea-tinymce"
+          id="desc"
+          name="description"
+          rows="5" 
+        ) #{role.description} 
+      div(class="form-group")
+        button(   
+          type="submit"
+          class="btn btn-primary"
+        ) Cập nhật
+        a(
+          class="btn btn-info"
+          href=`${prefixAdmin}/roles`
+          ) Quay lại
+  else
+    h1(class="mb-4") Bạn không có quyền truy cập trang này

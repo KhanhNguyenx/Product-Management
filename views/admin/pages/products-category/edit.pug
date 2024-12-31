@@ -3,102 +3,105 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main
-  h1(class="mb-4") Chỉnh sửa danh mục sản phẩm
-  +alert-error(5000)
-  +alert-success(5000)
-  form(
-    action=`${prefixAdmin}/products-category/edit/${ProductCategory.id}?_method=PATCH`
-    id="form-edit-products-category"
-    method="POST"
-    enctype ="multipart/form-data"
-    )
-    div(class="form-group")
-        label(for="title") Tiêu đề
-        input(
-            type="text"
-            class="form-control"
-            id="title"
-            name="title"
-            value=ProductCategory.title
-            required
-        )
-
-    div(class="form-group")
-        label(for="parent_id") Danh mục cha
-        select(
-            name="parent_id"
-            id="parent_id"
-            class="form-control"
-        )
-            option(value="") -- Chọn danh mục cha --
-              if(records)
-                  +select-tree(records, 1, ProductCategory.parent_id)
-
-    div(class="form-group")
-        label(for="desc") Mô tả
-        textarea(
-            class="form-control textarea-tinymce"
-            id="desc"
-            name="description"
-            rows="5" 
-        ) #{ProductCategory.description} 
-    div(
-        class="form-group"
-        upload-image
-    )
-        label(for="thumbnail") Ảnh  
-        input(
-            type="file"
-            class="form-control-file"
-            id="thumbnail"
-            name="thumbnail"
-            accept ="image/*"
-            upload-image-input 
-        )
-        img(
-            src=ProductCategory.thumbnail
-            upload-image-preview
-            class="image-preview"
-        )
-    div(class="form-group")
-        label(for="position") Vị trí
-        input(
-            type="number"
-            class="form-control"
-            id="position"
-            name="position"
-            placeholder="Tự động tăng"
-            min="1"
-            value=ProductCategory.position
-        )
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusActive"
-        name="status"
-        value="active"
-        checked = (ProductCategory.status == "active"? true : false)
+  if(role.permissions.includes("products-category_edit"))
+    h1(class="mb-4") Chỉnh sửa danh mục sản phẩm
+    +alert-error(5000)
+    +alert-success(5000)
+    form(
+      action=`${prefixAdmin}/products-category/edit/${ProductCategory.id}?_method=PATCH`
+      id="form-edit-products-category"
+      method="POST"
+      enctype ="multipart/form-data"
       )
-      label(for="statusActive" class="form-check-label") Hoạt động
-    div(class="form-group form-check form-check-inline")
-      input(
-        type="radio"
-        class="form-check-input"
-        id="statusInActive"
-        name="status"
-        value="inactive"
-        checked = (ProductCategory.status == "inactive"? true : false)
-      )
-      label(for="statusInActive" class="form-check-label") Dừng hoạt động
-    div(class="form-group")
-      button(
-        type="submit"
-        class="btn btn-warning"
-      ) Cập nhật
-      a(
-        class="btn btn-info"
-        href=`${prefixAdmin}/products-category`
-    ) Quay lại
+      div(class="form-group")
+          label(for="title") Tiêu đề
+          input(
+              type="text"
+              class="form-control"
+              id="title"
+              name="title"
+              value=ProductCategory.title
+              required
+          )
 
-  script(src="/admin/js/product.js")
+      div(class="form-group")
+          label(for="parent_id") Danh mục cha
+          select(
+              name="parent_id"
+              id="parent_id"
+              class="form-control"
+          )
+              option(value="") -- Chọn danh mục cha --
+                if(records)
+                    +select-tree(records, 1, ProductCategory.parent_id)
+
+      div(class="form-group")
+          label(for="desc") Mô tả
+          textarea(
+              class="form-control textarea-tinymce"
+              id="desc"
+              name="description"
+              rows="5" 
+          ) #{ProductCategory.description} 
+      div(
+          class="form-group"
+          upload-image
+      )
+          label(for="thumbnail") Ảnh  
+          input(
+              type="file"
+              class="form-control-file"
+              id="thumbnail"
+              name="thumbnail"
+              accept ="image/*"
+              upload-image-input 
+          )
+          img(
+              src=ProductCategory.thumbnail
+              upload-image-preview
+              class="image-preview"
+          )
+      div(class="form-group")
+          label(for="position") Vị trí
+          input(
+              type="number"
+              class="form-control"
+              id="position"
+              name="position"
+              placeholder="Tự động tăng"
+              min="1"
+              value=ProductCategory.position
+          )
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusActive"
+          name="status"
+          value="active"
+          checked = (ProductCategory.status == "active"? true : false)
+        )
+        label(for="statusActive" class="form-check-label") Hoạt động
+      div(class="form-group form-check form-check-inline")
+        input(
+          type="radio"
+          class="form-check-input"
+          id="statusInActive"
+          name="status"
+          value="inactive"
+          checked = (ProductCategory.status == "inactive"? true : false)
+        )
+        label(for="statusInActive" class="form-check-label") Dừng hoạt động
+      div(class="form-group")
+        button(
+          type="submit"
+          class="btn btn-warning"
+        ) Cập nhật
+        a(
+          class="btn btn-info"
+          href=`${prefixAdmin}/products-category`
+      ) Quay lại
+
+    script(src="/admin/js/product.js")
+  else 
+      h1(class="mb-4") Bạn không có quyền truy cập trang này

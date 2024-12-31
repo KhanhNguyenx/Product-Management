@@ -56,10 +56,10 @@ module.exports.restored = async (req, res) => {
   try {
     const id = req.params.id;
     await Product.updateOne(
-      { _id: id },
       {
+        _id: id,
         deleted: false,
-      }
+      },
     );
     req.flash("success", `Khôi phục thành công`);
     res.redirect("back");

@@ -17,6 +17,7 @@ module.exports = (app) => {
     dashboardRoutes
   );
   app.use(PATH_ADMIN + "/products", authMiddleware.requireAuth, productRoutes);
+
   app.use(
     PATH_ADMIN + "/products-category",
     authMiddleware.requireAuth,

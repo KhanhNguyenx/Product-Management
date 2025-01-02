@@ -54,6 +54,7 @@ block main
               th Vị trí
               th Trạng thái
               th Người tạo
+              th Cập nhật gần nhất 
               th Hành động
 
           tbody
@@ -107,9 +108,15 @@ block main
                     else
                       span(class="badge badge-danger") Dừng hoạt động
                 td 
-                  p #{item.accountFullname}
-                  p 
-                    +formatDateTime(item.createdBy.createAt)
+                    p #{item.accountFullname}
+                    p
+                      +formatDateTime(item.createdBy.createAt)
+                td 
+                  - const updateBy = item.updatedBy.slice(-1)[0];
+                  if(updateBy)
+                    p #{updateBy.accountFullname}
+                    p 
+                      +formatDateTime(updateBy.updateAt)
                 td
                   if(role.permissions.includes("products_edit"))
                     a(

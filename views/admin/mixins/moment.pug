@@ -1,5 +1,5 @@
 mixin formatDateTime(time)
-  p #{moment(time).format("DD/MM/YY HH:mm:ss")}
+  p #{moment.utc(time).format("DD/MM/YY HH:mm:ss")}
 
 mixin formatDate(time)
   p #{moment(time).format("DD/MM/YY")}

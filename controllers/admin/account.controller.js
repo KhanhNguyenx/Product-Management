@@ -92,6 +92,7 @@ module.exports.editPatch = async (req, res) => {
     email: req.body.email,
     deleted: false,
   });
+  
   if (emailExist) {
     req.flash("error", "Email đã tồn tại");
   } else {

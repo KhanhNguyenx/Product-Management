@@ -10,9 +10,9 @@ module.exports.addPost = async (req, res) => {
   const existProductInCart = cart.products.find(
     (item) => item.product_id == productId
   );
+  
   if (existProductInCart) {
     const quantityUpdate = existProductInCart.quantity + quantity;
-    console.log(quantityUpdate);
     await Cart.updateOne(
       { _id: cartId, "products.product_id": productId },
       { $set: { "products.$.quantity": quantityUpdate } }

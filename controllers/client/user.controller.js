@@ -63,6 +63,8 @@ module.exports.loginPost = async (req, res) => {
     return;
   }
 
+  //Khi đăng nhập tìm cart dựa vào user.id trong db
+  //Khi đăng xuất xóa cartId
   const cart = await Cart.findOne({
     user_id: user.id,
   });
@@ -71,6 +73,9 @@ module.exports.loginPost = async (req, res) => {
   } else {
     await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: user.id });
   }
+
+  //Khi đăng xuất không xóa cartId
+  // await Cart.updateOne({ _id: req.cookies.cartId }, { user_id: user.id });
 
   res.cookie("tokenUser", user.tokenUser);
 

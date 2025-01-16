@@ -2,6 +2,7 @@ const User = require("../../models/user.model");
 const ForgotPassword = require("../../models/forgot-password.model");
 const md5 = require("md5");
 const generateHelper = require("../../helpers/generate");
+const sendMailHelper = require("../../helpers/sendmail");
 //[GET] /user/register
 module.exports.register = (req, res) => {
   res.render("client/pages/user/register", {
@@ -97,5 +98,64 @@ module.exports.forgotPasswordPost = async (req, res) => {
 
   const forgotPassword = new ForgotPassword(objectForgotPassword);
   await forgotPassword.save();
-  res.send("OK");
+
+  // Nếu tồn tại email thì gửi mã OTP qua email
+  const subject = "Mã OTP xác minh lấy lại mật khẩu"
+  const html = `Mã OTP để lấy lại mật khẩu là <b>${otp}</b>. Thời hạn sử dụng là 3 phút.`;
+  sendMailHelper.sendMail(email, subject, html);
+
+  res.redirect(`/user/password/otp?email=${email}`);
+};
+//[GET] /user/password/otp
+module.exports.otpPassword = (req, res) => {
+  const email = req.query.email;
+
+  res.render("client/pages/user/otp-password", {
+    pageTitle: "Nhập mã OTP",
+    email: email,
+  });
+};
+//[POST] /user/password/otp
+module.exports.otpPasswordPost = async (req, res) => {
+  const email = req.body.email;
+  const otp = req.body.otp;
+
+  const result = await ForgotPassword.findOne({
+    email: email,
+    otp: otp,
+  });
+
+  if (!result) {
+    req.flash("error", `Mã OTP không đúng!`);
+    res.redirect("back");
+    return;
+  }
+
+  const user = await User.findOne({
+    email: email,
+  });
+  res.cookie("tokenUser", user.tokenUser);
+
+  res.redirect("/user/password/reset");
+};
+//[GET] /user/password/reset-password
+module.exports.resetPassword = (req, res) => {
+  res.render("client/pages/user/reset-password", {
+    pageTitle: "Đổi mật khẩu",
+  });
+};
+//[POST] /user/password/reset-password
+module.exports.resetPasswordPost = async (req, res) => {
+  const password = req.body.password;
+  const tokenUser = req.cookies.tokenUser;
+
+  await User.updateOne(
+    {
+      tokenUser: tokenUser,
+    },
+    {
+      password: md5(password),
+    }
+  );
+  res.redirect("/");
 };

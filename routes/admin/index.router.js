@@ -7,6 +7,7 @@ const restoredRoutes = require("./restored.route");
 const accountRoutes = require("./account.route");
 const authRoutes = require("./auth.route");
 const myAccountRoutes = require("./my-account.route");
+const settingsRoutes = require("./settings.route");
 
 const authMiddleware = require("../../middlewares/admin/auth.middleware");
 
@@ -25,8 +26,14 @@ module.exports = (app) => {
     productsCategoryRoutes
   );
   app.use(PATH_ADMIN + "/roles", authMiddleware.requireAuth, rolesRoutes);
+
   app.use(PATH_ADMIN + "/restored", authMiddleware.requireAuth, restoredRoutes);
+
   app.use(PATH_ADMIN + "/accounts", authMiddleware.requireAuth, accountRoutes);
+
   app.use(PATH_ADMIN + "/my-account", authMiddleware.requireAuth, myAccountRoutes);
+
+  app.use(PATH_ADMIN + "/settings", authMiddleware.requireAuth, settingsRoutes);
+  
   app.use(PATH_ADMIN + "/auth", authRoutes);
 };

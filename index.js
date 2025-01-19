@@ -18,7 +18,7 @@ const port = process.env.PORT;
 
 app.use(methodOverride("_method"));
 app.set("views", `${__dirname}/views`);
-app.set("view engine", "pug");  
+app.set("view engine", "pug");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -36,7 +36,7 @@ app.use(flash());
 
 //App Locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
-app.locals.moment = moment; 
+app.locals.moment = moment;
 
 app.use(express.static("public"));
 app.use(express.static(`${__dirname}/public`));
@@ -45,6 +45,12 @@ app.use(express.static(`${__dirname}/public`));
 router(app);
 // Routes Admin
 routerAdmin(app);
+//Routes 404
+app.get("*", (req, res) => {
+  res.render("client/pages/error/404", {
+    pageTitle: "404 Not Found",
+  });
+});
 
 app.listen(port, () => {
   console.log(`App listen on port ${port}`);

@@ -72,3 +72,12 @@ module.exports.resetPasswordPost = (req, res, next) => {
   }
   next();
 };
+
+module.exports.editInfo = (req, res, next) => {
+  if(req.body.newPassword !== req.body.confirmPassword){
+    req.flash("error", `Mật khẩu mới và mật khẩu xác nhận không trùng nhau!`);
+    res.redirect("back");
+    return;
+  }
+  next();
+};

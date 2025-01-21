@@ -1,0 +1,121 @@
+include ../../mixins/box-head.pug
+include ../../mixins/moment.pug
+include ../../mixins/alert.pug
+link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet')
+link(href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet")
+script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js")
+script(src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js")
+script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js")
+
+block main
+  +alert-error(2000)
+  +alert-success(2000)
+  form(
+    action=`/user/info/edit?_method=PATCH`
+    method="POST"
+    enctype="application/x-www-form-urlencoded"
+  )
+    .container.my-3
+      .row
+        .col-12
+          +box-head(pageTitle)
+    .container
+      .row.flex-lg-nowrap
+        .col
+          .row
+            .col.mb-3
+              .card
+                .card-body
+                  .e-profile
+                    //- .row
+                    //-   .col-12.col-sm-auto.mb-3
+                    //-     .mx-auto(style='width: 140px;')
+                    //-       .d-flex.justify-content-center.align-items-center.rounded(style='height: 140px; background-color: rgb(233, 236, 239);')
+                    //-         span(style='color: rgb(166, 168, 170); font: bold 8pt Arial;') 140x140
+                    //-   .col.d-flex.flex-column.flex-sm-row.justify-content-between.mb-3
+                    //-     .text-center.text-sm-left.mb-2.mb-sm-0
+                    //-       h4.pt-sm-2.pb-1.mb-0.text-nowrap #{user.fullName}
+                    //-       .mt-2
+                    //-         button.btn.btn-primary(type='button')
+                    //-           i.fa.fa-fw.fa-camera
+                    //-           span Change Photo
+                    //-     .text-center.text-sm-right
+                    //-       span.badge.badge-secondary administrator
+                    //-       .text-muted
+                    //-         small
+                    //-         +formatDateTime(user.createAt)
+                    .tab-content.pt-3
+                      .tab-pane.active
+                        .row
+                          .col
+                            .row
+                              .col
+                                .form-group
+                                  label(for="fullName") Full Name
+                                  input.form-control(
+                                    type="text"
+                                    name="fullName"
+                                    id="fullName"
+                                    value=user.fullName
+                                  )
+                              .col
+                                .form-group
+                                  label(for="phone") Phone
+                                  input.form-control(
+                                    type="text"
+                                    name="phone"
+                                    id="phone"
+                                    value=user.phone
+                                  )
+                            .row
+                              .col
+                                .form-group
+                                  label(for="email") Email
+                                  input.form-control(
+                                    type="text"
+                                    name="email"
+                                    id="email"
+                                    value=user.email
+                                  )
+                        .row
+                          .col-12.col-sm-6.mb-3
+                            .mb-2
+                              b Change Password
+                            .row
+                              .col
+                                .form-group
+                                  label(for="currentPassword") Current Password
+                                  input.form-control(
+                                    type="password"
+                                    placeholder="••••••••••••"
+                                    name="currentPassword"
+                                    id="currentPassword"
+                                  )
+                            .row
+                              .col
+                                .form-group
+                                  label(for="newPassword") New Password
+                                  input.form-control(
+                                    type="password"
+                                    placeholder="••••••••••••"
+                                    name="newPassword"
+                                    id="newPassword"
+                                  )
+                            .row
+                              .col
+                                .form-group
+                                  label(for="confirmNewPassword") Confirm Password
+                                  input.form-control(
+                                    type="password"
+                                    placeholder="••••••••••••"
+                                    name="confirmPassword"
+                                    id="confirmPassword"
+                                  )
+                        .row
+                          .col.d-flex.justify-content-end
+                            button.btn.btn-primary(type="submit") Save Changes
+  style.
+    body {
+      margin-top: 20px;
+      background: #f8f8f8;
+    }

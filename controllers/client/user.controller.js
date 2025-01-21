@@ -4,6 +4,7 @@ const Cart = require("../../models/cart.model");
 const md5 = require("md5");
 const generateHelper = require("../../helpers/generate");
 const sendMailHelper = require("../../helpers/sendmail");
+
 //[GET] /user/register
 module.exports.register = (req, res) => {
   res.render("client/pages/user/register", {
@@ -182,4 +183,57 @@ module.exports.info = async (req, res) => {
   res.render("client/pages/user/info", {
     pageTitle: "Thông tin tài khoản",
   });
+};
+//[GET] /user/info/edit
+module.exports.edit = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      _id: res.locals.user.id,
+    });
+    res.render("client/pages/user/info-edit", {
+      pageTitle: "Thay đổi thông tin",
+      user: user,
+    });
+  } catch (error) {
+    req.flash("error", `Không tồn tại tài khoản`);
+    res.redirect(`/user/info`);
+  }
+};
+// [PATCH]/user/info/edit
+module.exports.editPatch = async (req, res) => {
+  const id = res.locals.user.id;
+  const user = await User.findOne({ _id: id });
+
+  // Lấy mật khẩu cũ và mật khẩu mới
+  const currentPassword = req.body.currentPassword;
+  const newPassword = req.body.newPassword;
+
+  // Kiểm tra người dùng có tồn tại không
+  if (!user) {
+    req.flash("error", "Tài khoản không tồn tại");
+    return res.redirect("/user/info");
+  }
+
+  // Kiểm tra mật khẩu cũ và mật khẩu mới
+  if (currentPassword) {
+    // Kiểm tra mật khẩu cũ có đúng không
+    if (md5(currentPassword) === user.password) {
+      user.password = md5(newPassword);
+    } else {
+      req.flash("error", "Mật khẩu cũ không chính xác");
+      return res.redirect("/user/info/edit");
+    }
+  } else {
+    // Nếu không thay đổi mật khẩu, xóa các trường liên quan đến mật khẩu khỏi req.body
+    delete req.body.currentPassword;
+    delete req.body.newPassword;
+    delete req.body.confirmPassword;
+  }
+
+  console.log(req.body)
+  // Cập nhật thông tin người dùng
+  await User.updateOne({ _id: id }, { $set: { password: user.password, ...req.body } });
+  req.flash("success", "Cập nhật tài khoản thành công");
+
+  return res.redirect("/user/info");
 };

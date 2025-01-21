@@ -6,5 +6,46 @@ block main
     .row
       .col-12
         +box-head(pageTitle)
+  section(style='background-color: #eee;')
+  .container
+    .row
+      .col-lg-4
+        .card.mb-4
+          .card-body.text-center
+            img.rounded-circle.img-fluid(src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp' alt='avatar' style='width: 150px;')
+            h5.my-3 #{user.fullName}
+            p.text-muted.mb-1 Full Stack Developer
+            p.text-muted.mb-4 Bay Area, San Francisco, CA
+            .d-flex.justify-content-center.mb-2
+              button.btn.btn-primary(type='button' data-mdb-button-init='' data-mdb-ripple-init='' onclick="window.location.href='/user/info/edit'") Edit Info
+      .col-lg-8
+        .card.mb-4
+          .card-body
+            .row
+              .col-sm-3
+                p.mb-0 Full Name
+              .col-sm-9
+                p.text-muted.mb-0 #{user.fullName}
+            hr
+            .row
+              .col-sm-3
+                p.mb-0 Email
+              .col-sm-9
+                p.text-muted.mb-0 #{user.email}
+            hr
+            .row
+              .col-sm-3
+                p.mb-0 Phone
+              .col-sm-9
+                if(user.phone)
+                  p.text-muted.mb-0 #{user.phone}
+                else 
+                  p.text-muted.mb-0 Chưa cập nhật
+            hr
+            .row
+              .col-sm-3
+                p.mb-0 Created At
+              .col-sm-9
+                  p.text-muted.mb-0 #{user.createdAt}
 
     div #{user}

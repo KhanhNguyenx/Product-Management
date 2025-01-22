@@ -11,7 +11,7 @@ const flash = require("express-flash");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const moment = require("moment");
-const http = require('http');
+const http = require("http");
 const { Server } = require("socket.io");
 
 database.connect();
@@ -22,10 +22,7 @@ const port = process.env.PORT;
 // SocketIO
 const server = http.createServer(app);
 const io = new Server(server);
-
-io.on("connection", (socket) => {
-  console.log("Kết nối thành công!", socket.id)
-});
+global._io = io;
 // End SocketIO
 
 app.use(methodOverride("_method"));

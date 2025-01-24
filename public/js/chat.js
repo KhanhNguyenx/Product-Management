@@ -1,3 +1,4 @@
+import * as Popper from "https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js";
 
 // CLIENT_SEND_MESSAGE
 const formSendData = document.querySelector(".chat .inner-form");
@@ -22,7 +23,7 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
   const div = document.createElement("div");
   let htmlFullName = "";
 
-  if(myId != data.userId) {
+  if (myId != data.userId) {
     div.classList.add("inner-incoming");
     htmlFullName = `<div class="inner-name">${data.fullName}</div>`;
   } else {
@@ -36,7 +37,7 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
 
   body.appendChild(div);
   body.scrollTop = body.scrollHeight;
-})
+});
 // End SERVER_SEND_MESSAGE
 
 // Scroll to bottom
@@ -46,15 +47,44 @@ if (bodyChat) {
 }
 // End Scroll to bottom
 
-
 //Enter to send message
-document.addEventListener('DOMContentLoaded', function () {
-  const button = document.querySelector('.fa-paper-plane'); // Tìm nút với lớp "fa-paper-plane"
+document.addEventListener("DOMContentLoaded", function () {
+  const button = document.querySelector(".fa-paper-plane"); // Tìm nút với lớp "fa-paper-plane"
 
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') { // Kiểm tra nếu phím nhấn là Enter
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      // Kiểm tra nếu phím nhấn là Enter
       button.click(); // Tự động nhấp vào nút
     }
   });
 });
 //End Enter to send message
+
+//Show Icon Chat
+const buttonIcon = document.querySelector(".button-icon");
+
+if (buttonIcon) {
+  const tooltip = document.querySelector(".tooltip");
+  Popper.createPopper(buttonIcon, tooltip);
+
+  // Show Tooltip
+  buttonIcon.addEventListener("click", () => {
+    tooltip.classList.toggle("shown");
+  });
+
+  // buttonIcon.onclick =()=> {
+  //   tooltip.classList.toggle('shown');
+  // };
+
+  // Insert Icon To Input
+  const emojiPicker = document.querySelector("emoji-picker");
+  const inputChat = document.querySelector(
+    ".chat .inner-form input[name='content']"
+  );
+
+  emojiPicker.addEventListener("emoji-click", (event) => {
+    const icon = event.detail.unicode;
+    inputChat.value = inputChat.value + icon;
+  });
+}
+//End Show Icon Chat

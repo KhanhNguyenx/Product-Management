@@ -71,6 +71,7 @@ socket.on("SERVER_SEND_MESSAGE", (data) => {
 
   body.insertBefore(div, boxTyping);
   body.scrollTop = body.scrollHeight;
+  const gallery = new Viewer(div);
 });
 // End SERVER_SEND_MESSAGE
 
@@ -191,3 +192,9 @@ socket.on("SERVER_RETURN_TYPING", (data) => {
   }
 });
 //END SERVER_RETURN_TYPING
+
+// Preview Image
+if(bodyChat) {
+  const gallery = new Viewer(bodyChat);
+}
+// End Preview Image

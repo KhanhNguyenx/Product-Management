@@ -26,5 +26,4 @@ router.get("/info",authMiddleware.requireAuth, controller.info);
 router.get("/info/edit",authMiddleware.requireAuth, controller.edit);
 router.patch("/info/edit",authMiddleware.requireAuth,validate.editInfo, controller.editPatch);
 
-
 module.exports = router;

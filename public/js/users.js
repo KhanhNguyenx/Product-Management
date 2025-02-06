@@ -24,3 +24,18 @@ listbuttonCancelFriend.forEach(button => {
     });
 });
 //Hết chức năng hủy yêu cầu kết bạn 
+
+// Từ chối kết bạn
+const listbuttonRefuseFriend = document.querySelectorAll("[btn-refuse-friend]");
+if(listbuttonRefuseFriend.length > 0) {
+  listbuttonRefuseFriend.forEach(button => {
+    button.addEventListener("click", () => {
+      button.closest(".box-user").classList.add("refuse");
+
+      const userId = button.getAttribute("btn-refuse-friend");
+      
+      socket.emit("CLIENT_REFUSE_FRIEND", userId);
+    });
+  });
+}
+// Hết Từ chối kết bạn

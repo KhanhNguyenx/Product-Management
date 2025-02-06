@@ -64,5 +64,37 @@ module.exports = (res) => {
       }
       //End Delete ResquestFriends to UserId
     });
+
+    // user từ chối lời mời kết bạn từ myUser
+    socket.on("CLIENT_REFUSE_FRIEND", async (userId) => {
+      const myUserId = res.locals.user.id;
+
+      //Delete AcceptFriends to myUserId
+      const existAccept = await User.findOne({
+        _id: myUserId,
+        acceptFriends: userId,
+      });
+
+      if (existAccept) {
+        await User.updateOne(
+          { _id: myUserId },
+          { $pull: { acceptFriends: userId } }
+        );
+      }
+      //End Delete AcceptFriends to myUserId
+
+      //Delete ResquestFriends to UserId
+      const existRequest = await User.findOne({
+        _id: userId,
+        requestFriends: myUserId,
+      });
+      if (existRequest) {
+        await User.updateOne(
+          { _id: userId },
+          { $pull: { requestFriends: myUserId } }
+        );
+      }
+      //End Delete ResquestFriends to UserId
+    });
   });
 };

@@ -31,12 +31,28 @@ module.exports.request = async (req, res) => {
   const requestFriends = myUser.requestFriends;
 
   const users = await User.find({
-    _id: { $ne: userId, $in: requestFriends },
+    _id: {$in: requestFriends },
     status: "active",
     deleted: false,
   }).select("id fullName avatar");
-  
+
   res.render("client/pages/users/request", {
+    users: users,
+  });
+};
+module.exports.accept = async (req, res) => {
+  usersSocket(res);
+  const userId = res.locals.user.id;
+
+  const myUser = await User.findOne({ _id: userId });
+  const acceptFriends = myUser.acceptFriends;
+
+  const users = await User.find({
+    _id: {$in: acceptFriends },
+    status: "active",
+    deleted: false,
+  }).select("id fullName avatar");
+  res.render("client/pages/users/accept", {
     users: users,
   });
 };

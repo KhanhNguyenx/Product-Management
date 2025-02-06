@@ -1,7 +1,7 @@
 const User = require("../../models/user.model");
 module.exports = (res) => {
   _io.once("connection", (socket) => {
-    // Người dùng gửi tin nhắn lên server
+    // myUser gửi lời mời kết bạn cho user
     socket.on("CLIENT_ADD_FRIEND", async (userId) => {
       const myUserId = res.locals.user.id;
 
@@ -31,6 +31,38 @@ module.exports = (res) => {
         );
       }
       //End Add ResquestFriends to UserId
+    });
+
+    // myUser hủy lời mời kết bạn cho user
+    socket.on("CLIENT_CANCEL_FRIEND", async (userId) => {
+      const myUserId = res.locals.user.id;
+
+      //Delete AcceptFriends to myUserId
+      const existAccept = await User.findOne({
+        _id: userId,
+        acceptFriends: myUserId,
+      });
+
+      if (existAccept) {
+        await User.updateOne(
+          { _id: userId },
+          { $pull: { acceptFriends: myUserId } }
+        );
+      }
+      //End Delete AcceptFriends to myUserId
+
+      //Delete ResquestFriends to UserId
+      const existRequest = await User.findOne({
+        _id: myUserId,
+        requestFriends: userId,
+      });
+      if (existRequest) {
+        await User.updateOne(
+          { _id: myUserId },
+          { $pull: { requestFriends: userId } }
+        );
+      }
+      //End Delete ResquestFriends to UserId
     });
   });
 };

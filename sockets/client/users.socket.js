@@ -1,0 +1,36 @@
+const User = require("../../models/user.model");
+module.exports = (res) => {
+  _io.once("connection", (socket) => {
+    // Người dùng gửi tin nhắn lên server
+    socket.on("CLIENT_ADD_FRIEND", async (userId) => {
+      const myUserId = res.locals.user.id;
+
+      //Add AcceptFriends to myUserId
+      const existAccept = await User.findOne({
+        _id: userId,
+        acceptFriends: myUserId,
+      });
+
+      if (!existAccept) {
+        await User.updateOne(
+          { _id: userId },
+          { $push: { acceptFriends: myUserId } }
+        );
+      }
+      //End Add AcceptFriends to myUserId
+
+      //Add ResquestFriends to UserId
+      const existRequest = await User.findOne({
+        _id: myUserId,
+        requestFriends: userId,
+      });
+      if (!existRequest) {
+        await User.updateOne(
+          { _id: myUserId },
+          { $push: { requestFriends: userId } }
+        );
+      }
+      //End Add ResquestFriends to UserId
+    });
+  });
+};

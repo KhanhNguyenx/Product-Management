@@ -96,5 +96,55 @@ module.exports = (res) => {
       }
       //End Delete ResquestFriends to UserId
     });
+
+    // user chấp nhận lời mời kết bạn từ myUser
+    socket.on("CLIENT_ACCEPT_FRIEND", async (userId) => {
+      const myUserId = res.locals.user.id;
+
+      //Add myUserId {user_id, room_chat_id} to userId friendsList
+      //Delete AcceptFriends to myUserId
+      const existAccept = await User.findOne({
+        _id: myUserId,
+        acceptFriends: userId,
+      });
+
+      if (existAccept) {
+        await User.updateOne(
+          { _id: myUserId },
+          {
+            $push: {
+              friendsList: {
+                user_id: userId,
+                room_chat_id: ""
+              }
+            },
+            $pull: { acceptFriends: userId }
+          }
+        );
+      }
+      //End Delete AcceptFriends to myUserId
+
+      //Add userId {user_id, room_chat_id} to myUserId friendsList
+      //Delete ResquestFriends to UserId
+      const existRequest = await User.findOne({
+        _id: userId,
+        requestFriends: myUserId,
+      });
+      if (existRequest) {
+        await User.updateOne(
+          { _id: userId },
+          {
+            $push: {
+              friendsList: {
+                user_id: myUserId,
+                room_chat_id: ""
+              }
+            },
+            $pull: { acceptFriends: myUserId }
+          }
+        );
+      }
+      //End Delete ResquestFriends to UserId
+    });
   });
 };

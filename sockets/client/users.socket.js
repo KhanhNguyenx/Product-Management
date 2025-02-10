@@ -31,6 +31,19 @@ module.exports = (res) => {
         );
       }
       //End Add ResquestFriends to UserId
+
+      // Lấy độ dài acceptFriends của B để trả về cho B
+      const infoUser = await User.findOne({
+        _id: userId,
+      }).select("acceptFriends");
+
+      const userLengthAcceptFriends = infoUser.acceptFriends.length;
+
+      socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+        userId: userId,
+        lengthAcceptFriends: userLengthAcceptFriends
+      });
+
     });
 
     // myUser hủy lời mời kết bạn cho user
@@ -63,6 +76,17 @@ module.exports = (res) => {
         );
       }
       //End Delete ResquestFriends to UserId
+      // Lấy độ dài acceptFriends của B để trả về cho B
+      const infoUser = await User.findOne({
+        _id: userId,
+      }).select("acceptFriends");
+
+      const lengthAcceptFriendsB = infoUser.acceptFriends.length;
+
+      socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
+        userId: userId,
+        lengthAcceptFriends: lengthAcceptFriendsB
+      });
     });
 
     // user từ chối lời mời kết bạn từ myUser

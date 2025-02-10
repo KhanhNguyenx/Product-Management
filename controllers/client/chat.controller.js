@@ -20,8 +20,6 @@ module.exports.index = async (req, res) => {
 
     chat.infoUser = infoUser;
   }
-
-  console.log(chats);
   // Hết Lấy data từ database
 
   res.render("client/pages/chat/index", {

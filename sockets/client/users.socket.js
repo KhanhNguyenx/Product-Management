@@ -140,7 +140,7 @@ module.exports = (res) => {
                 room_chat_id: ""
               }
             },
-            $pull: { acceptFriends: myUserId }
+            $pull: { requestFriends: myUserId }
           }
         );
       }

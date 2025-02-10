@@ -11,9 +11,9 @@ module.exports.notFriend = async (req, res) => {
   const myUser = await User.findOne({ _id: userId });
   const requestFriends = myUser.requestFriends;
   const acceptFriends = myUser.acceptFriends;
-
+  const friendsListIds = myUser.friendsList.map(user => user.user_id);
   const users = await User.find({
-    _id: { $ne: userId, $nin: [...requestFriends, ...acceptFriends] },
+    _id: { $ne: userId, $nin: [...requestFriends, ...acceptFriends,...friendsListIds] },
     status: "active",
     deleted: false,
   }).select("id fullName avatar");

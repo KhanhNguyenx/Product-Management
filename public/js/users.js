@@ -55,13 +55,92 @@ if (listbuttonAcceptFriend.length > 0) {
 // Hết Chấp nhận kết bạn
 
 // SERVER_RETURN_LENGTH_ACCEPT_FRIEND
-const badgeUsersAccept = document.querySelector(`[badge-users-accept]`);
-if (badgeUsersAccept) {
-  const userId = badgeUsersAccept.getAttribute("badge-users-accept");
-  if (userId === data.userId) {
-    socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
-      badgeUsersAccept.innerHTML = data.lengthAcceptFriends;
-    });
+socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
+  const badgeUsersAccept = document.querySelector(
+    `[badge-users-accept="${data.userId}"]`
+  );
+  if (badgeUsersAccept) {
+    badgeUsersAccept.innerHTML = data.lengthAcceptFriends;
   }
-}
+});
 // End SERVER_RETURN_LENGTH_ACCEPT_FRIEND
+
+//SERVER_SEND_INFO_ACCEPT_FRIEND
+socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
+  const dataUsersAccept = document.querySelector(
+    `[data-users-accept="${data.userId}"]`
+  );
+  if (dataUsersAccept) {
+    //Vẽ user ra giao diện
+    const newBoxUser = document.createElement("div");
+    newBoxUser.classList.add("col-6");
+
+    newBoxUser.innerHTML = `
+      <div class="box-user">
+        <div class="inner-avatar">
+          <img src="https://robohash.org/hicveldicta.png" alt="${data.myUserInfo.fullName}" />
+        </div>
+        <div class="inner-info">
+            <div class="inner-name">
+              ${data.myUserInfo.fullName}
+            </div>
+            <div class="inner-buttons">
+              <button
+                class="btn btn-sm btn-primary mr-1"
+                btn-accept-friend="${data.myUserInfo._id}"
+              >
+                Chấp nhận
+              </button>
+              <button
+                class="btn btn-sm btn-secondary mr-1"
+                btn-refuse-friend="${data.myUserInfo._id}"
+              >
+                Xóa
+              </button>
+              <button
+                class="btn btn-sm btn-secondary mr-1"
+                btn-deleted-friend=""
+                disabled=""
+              >
+                Đã xóa
+              </button>
+              <button
+                class="btn btn-sm btn-primary mr-1"
+                btn-accepted-friend=""
+                disabled=""
+              >
+                Đã chấp nhận
+              </button>
+            </div>
+        </div>
+      </div>
+    `;
+
+    dataUsersAccept.appendChild(newBoxUser);
+    //Hết vẽ user ra giao diện
+
+    //Hủy lời mời kết bạn
+    const buttonRefuse = newBoxUser.querySelector("[btn-refuse-friend]");
+    buttonRefuse.addEventListener("click", () => {
+      buttonRefuse.closest(".box-user").classList.add("refuse");
+
+      const userId = buttonRefuse.getAttribute("btn-refuse-friend");
+
+      socket.emit("CLIENT_REFUSE_FRIEND", userId);
+    });
+    //Hết Hủy lời mời kết bạn
+
+    //Chấp nhận kết bạn
+    const buttonAccept = newBoxUser.querySelector("[btn-accept-friend]");
+    buttonAccept.addEventListener("click", () => {
+      buttonAccept.closest(".box-user").classList.add("accepted");
+
+      const userId = buttonAccept.getAttribute("btn-accept-friend");
+
+      socket.emit("CLIENT_ACCEPT_FRIEND", userId);
+    });
+    //Hết Chấp nhận kết bạn
+  }
+});
+
+// END SERVER_SEND_INFO_ACCEPT_FRIEND

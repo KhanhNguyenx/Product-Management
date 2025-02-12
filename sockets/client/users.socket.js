@@ -37,11 +37,21 @@ module.exports = (res) => {
         _id: userId,
       }).select("acceptFriends");
 
-      const userLengthAcceptFriends = infoUser.acceptFriends.length;
+      const lengthAcceptFriends = infoUser.acceptFriends.length;
 
       socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
         userId: userId,
-        lengthAcceptFriends: userLengthAcceptFriends
+        lengthAcceptFriends: lengthAcceptFriends,
+      });
+
+      //Lấy Info của myUser để trả về cho User
+      const myUserInfo = await User.findOne({
+        _id: myUserId,
+      }).select("id fullName avatar");
+      
+      socket.broadcast.emit("SERVER_RETURN_INFO_ACCEPT_FRIEND", {
+        userId: userId,
+        myUserInfo: myUserInfo,
       });
 
     });
@@ -76,6 +86,7 @@ module.exports = (res) => {
         );
       }
       //End Delete ResquestFriends to UserId
+
       // Lấy độ dài acceptFriends của B để trả về cho B
       const infoUser = await User.findOne({
         _id: userId,
@@ -85,7 +96,7 @@ module.exports = (res) => {
 
       socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", {
         userId: userId,
-        lengthAcceptFriends: lengthAcceptFriendsB
+        lengthAcceptFriends: lengthAcceptFriendsB,
       });
     });
 
@@ -139,10 +150,10 @@ module.exports = (res) => {
             $push: {
               friendsList: {
                 user_id: userId,
-                room_chat_id: ""
-              }
+                room_chat_id: "",
+              },
             },
-            $pull: { acceptFriends: userId }
+            $pull: { acceptFriends: userId },
           }
         );
       }
@@ -161,10 +172,10 @@ module.exports = (res) => {
             $push: {
               friendsList: {
                 user_id: myUserId,
-                room_chat_id: ""
-              }
+                room_chat_id: "",
+              },
             },
-            $pull: { requestFriends: myUserId }
+            $pull: { requestFriends: myUserId },
           }
         );
       }

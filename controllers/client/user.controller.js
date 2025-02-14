@@ -80,10 +80,25 @@ module.exports.loginPost = async (req, res) => {
 
   res.cookie("tokenUser", user.tokenUser);
 
+  // Cập nhật trạng thái statusOnline
+  await User.updateOne({
+    _id: user.id
+  }, {
+    statusOnline: "online"
+  });
+
   res.redirect("/");
 };
 //[GET] /user/logout
-module.exports.logout = (req, res) => {
+module.exports.logout = async (req, res) => {
+
+  // Cập nhật trạng thái statusOnline
+  await User.updateOne({
+    _id: res.locals.user.id
+  }, {
+    statusOnline: "offline"
+  });
+  
   res.clearCookie("tokenUser");
   res.clearCookie("cartId");
   res.redirect("/");

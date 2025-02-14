@@ -56,3 +56,20 @@ module.exports.accept = async (req, res) => {
     users: users,
   });
 };
+
+// [GET] /users/friends
+module.exports.friends = async (req, res) => {
+  const friendsListId = res.locals.user.friendsList.map(item => item.user_id);
+  
+  const users = await User.find({
+    _id: { $in: friendsListId },
+    status: "active",
+    deleted: false
+  }).select("id fullName avatar statusOnline");
+
+
+  res.render("client/pages/users/friends", {
+    pageTitle: "Danh sách bạn bè",
+    users: users
+  });
+};

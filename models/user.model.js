@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "active",
     },
+    statusOnline: String,
     acceptFriends: Array, //lời mời gửi đi
     requestFriends: Array, //lời mời nhận được
     friendsList: [ //danh sách bạn bè

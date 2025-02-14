@@ -141,15 +141,16 @@ socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
       socket.emit("CLIENT_ACCEPT_FRIEND", userId);
     });
     //Hết Chấp nhận kết bạn
-
-    // Khi A gửi kết bạn cho B, danh sách người dùng của B xóa đi A
-    const dataUsersNotFriend = document.querySelector(
-      `[data-users-not-friend="${data.userId}"]`
+  }
+  // Khi A gửi kết bạn cho B, danh sách người dùng của B xóa đi A
+  const dataUsersNotFriend = document.querySelector(
+    `[data-users-not-friend="${data.userId}"]`
+  );
+  if (dataUsersNotFriend) {
+    const boxUserDelete = dataUsersNotFriend.querySelector(
+      `[user-id="${data.myUserInfo._id}"]`
     );
-    if (dataUsersNotFriend) {
-      const boxUserDelete = dataUsersNotFriend.querySelector(
-        `[user-id="${data.myUserInfo._id}"]`
-      );
+    if (boxUserDelete) {
       dataUsersNotFriend.removeChild(boxUserDelete);
     }
   }

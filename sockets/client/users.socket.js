@@ -1,4 +1,6 @@
 const User = require("../../models/user.model");
+const RoomChat = require("../../models/room-chat.model");
+
 module.exports = (res) => {
   _io.once("connection", (socket) => {
     // myUser gửi lời mời kết bạn cho user
@@ -142,6 +144,23 @@ module.exports = (res) => {
     socket.on("CLIENT_ACCEPT_FRIEND", async (userId) => {
       const myUserId = res.locals.user.id;
 
+      // Tạo phòng chat mới
+      const roomChat = new RoomChat({
+        typeRoom: "friend",
+        users: [
+          {
+            user_id: myUserId,
+            role: "superAdmin"
+          },
+          {
+            user_id: userId,
+            role: "superAdmin"
+          }
+        ],
+      });
+
+      await roomChat.save();
+
       //Add myUserId {user_id, room_chat_id} to userId friendsList
       //Delete AcceptFriends to myUserId
       const existAccept = await User.findOne({
@@ -156,7 +175,7 @@ module.exports = (res) => {
             $push: {
               friendsList: {
                 user_id: userId,
-                room_chat_id: "",
+                room_chat_id: roomChat._id,
               },
             },
             $pull: { acceptFriends: userId },
@@ -178,7 +197,7 @@ module.exports = (res) => {
             $push: {
               friendsList: {
                 user_id: myUserId,
-                room_chat_id: "",
+                room_chat_id: roomChat._id,
               },
             },
             $pull: { requestFriends: myUserId },
